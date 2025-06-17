@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -27,7 +27,7 @@
     }
     h2 {
       margin-bottom: 1rem;
-      color: #4b0082; /* dark purple */
+      color: #4b0082;
     }
     form {
       display: none;
@@ -57,13 +57,13 @@
     input[type="text"]:focus,
     input[type="email"]:focus,
     input[type="password"]:focus {
-      border-color: #7b3fbf; /* medium purple */
+      border-color: #7b3fbf;
       outline: none;
     }
     button {
       width: 100%;
       padding: 0.6rem;
-      background: #7b3fbf; /* medium purple */
+      background: #7b3fbf;
       border: none;
       color: white;
       font-weight: 700;
@@ -73,7 +73,7 @@
       transition: background 0.3s;
     }
     button:hover {
-      background: #5e2ea0; /* darker purple */
+      background: #5e2ea0;
     }
     .toggle-btns {
       margin-top: 1rem;
@@ -96,12 +96,6 @@
       background: #7b3fbf;
       color: white;
       border-color: #7b3fbf;
-    }
-    .error-msg {
-      color: #d93025;
-      font-size: 0.9rem;
-      margin-bottom: 1rem;
-      display: none;
     }
   </style>
 </head>
@@ -138,7 +132,12 @@
     </div>
   </div>
 
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <!-- Your separate JS file -->
+  <script src="email.js"></script>
   <script>
+    // Form toggle logic
     const loginForm = document.getElementById('login-form');
     const signupForm = document.getElementById('signup-form');
     const showLoginBtn = document.getElementById('show-login');
@@ -163,3 +162,35 @@
   </script>
 </body>
 </html>
+// Initialize EmailJS with your Public Key (replace with your actual key)
+emailjs.init("3CD0IBkiv7B0iso0M");
+
+// Signup form email sending
+const signupForm = document.getElementById('signup-form');
+
+signupForm.addEventListener('submit', function(event) {
+  event.preventDefault();
+
+  const fullName = document.getElementById('signup-name').value.trim();
+  const email = document.getElementById('signup-email').value.trim();
+
+  if (!fullName || !email) {
+    alert('Please fill in all required fields.');
+    return;
+  }
+
+  const templateParams = {
+    to_name: fullName,
+    to_email: email,
+  };
+
+  emailjs.send('service_c2238fb', 'template_iw7zc99', templateParams)
+    .then(() => {
+      alert('Signup successful! Confirmation email sent.');
+      signupForm.reset();
+    })
+    .catch((error) => {
+      alert('Oops, something went wrong. Please try again later.');
+      console.error('EmailJS error:', error);
+    });
+});
